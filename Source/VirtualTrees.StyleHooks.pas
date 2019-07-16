@@ -127,7 +127,7 @@ procedure TVclStyleScrollBarsHook.CalcScrollBarsRect;
   begin
     BarInfo.cbSize := SizeOf(BarInfo);
     Ret := GetScrollBarInfo(Handle, Integer(OBJID_VSCROLL), BarInfo);
-    FVertScrollWnd.Visible := (seBorder in Control.StyleElements) and Ret and (not (STATE_SYSTEM_INVISIBLE and BarInfo.rgstate[0] <> 0));
+    FVertScrollWnd.Visible := {$if CompilerVersion > 23} (seBorder in Control.StyleElements) and {$ifend} Ret and (not (STATE_SYSTEM_INVISIBLE and BarInfo.rgstate[0] <> 0));
     FVertScrollWnd.Enabled := FVertScrollWnd.Visible and (not (STATE_SYSTEM_UNAVAILABLE and BarInfo.rgstate[0] <> 0));
   end;
 
@@ -138,7 +138,7 @@ procedure TVclStyleScrollBarsHook.CalcScrollBarsRect;
   begin
     BarInfo.cbSize := SizeOf(BarInfo);
     Ret := GetScrollBarInfo(Handle, Integer(OBJID_HSCROLL), BarInfo);
-    FHorzScrollWnd.Visible := (seBorder in Control.StyleElements) and Ret and (not (STATE_SYSTEM_INVISIBLE and BarInfo.rgstate[0] <> 0));
+    FHorzScrollWnd.Visible := {$if CompilerVersion > 23} (seBorder in Control.StyleElements) and {$ifend} Ret and (not (STATE_SYSTEM_INVISIBLE and BarInfo.rgstate[0] <> 0));
     FHorzScrollWnd.Enabled := FHorzScrollWnd.Visible and (not (STATE_SYSTEM_UNAVAILABLE and BarInfo.rgstate[0] <> 0));
   end;
 
@@ -183,7 +183,7 @@ begin
   if ((Handle = 0) or (DC = 0)) then
     Exit;
 
-  if FHorzScrollWnd.Visible and StyleServices.Available and (seBorder in Control.StyleElements) then
+  if FHorzScrollWnd.Visible and StyleServices.Available {$if CompilerVersion > 23} and (seBorder in Control.StyleElements) {$ifend} then
   begin
     B := TBitmap.Create;
     try
@@ -231,7 +231,7 @@ begin
   if ((Handle = 0) or (DC = 0)) then
     Exit;
 
-  if FVertScrollWnd.Visible and StyleServices.Available and (seBorder in Control.StyleElements) then
+  if FVertScrollWnd.Visible and StyleServices.Available {$if CompilerVersion > 23} and (seBorder in Control.StyleElements) {$ifend} then
   begin
     B := TBitmap.Create;
     try
