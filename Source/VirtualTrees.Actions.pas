@@ -4,7 +4,9 @@ interface
 
 uses
   System.Classes,
+  {$if CompilerVersion >= 24}
   System.Actions,
+  {$ifend}
   Vcl.Controls,
   Vcl.ActnList,
   VirtualTrees;
@@ -247,7 +249,11 @@ begin
   fDesiredCheckState := csCheckedNormal;
   fToExecute := procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; Data: Pointer; var Abort: Boolean)
                 begin
+                  {$if CompilerVersion > 23}
                   if not Control.CheckState[Node].IsDisabled then
+                  {$else}
+                  if not CheckStateIsDisabled(Control.CheckState[Node]) then
+                  {$ifend}
                     Control.CheckState[Node] := fDesiredCheckState;
                 end;
 end;
